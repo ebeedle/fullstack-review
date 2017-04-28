@@ -1,14 +1,17 @@
 var express = require('express');
-var app = express();
 var request = require('request');
+var bodyParser = require('body-parser');
+var app = express();
 
-
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
+
 app.post('/repos/import', function (req, res) {
-  console.log(req);
+  
     var options = {
-      url: 'https://api.github.com/users/$(user)/repos',
+      url:`https://api.github.com/users/$(req.body.username)/repos`,
       headers: {
         'User-Agent': 'request'
       },
@@ -19,7 +22,7 @@ app.post('/repos/import', function (req, res) {
     };
     
     function  callback(error, response, body) {
-      // console.log(body);  
+      console.log(body);
     }
 
     request(options, callback);
